@@ -62,4 +62,35 @@ describe('PromptInput', () => {
     fireEvent.keyDown(textbox, { key: 'Enter', ctrlKey: true });
     expect(onGenerate).not.toHaveBeenCalled();
   });
+  describe('프롬프트 히스토리', () => {
+    it('히스토리가 없으면 최근 프롬프트 영역을 보여주지 않는다', () => {
+      render(<PromptInput onGenerate={vi.fn()} isLoading={false} history={[]} />);
+      expect(screen.queryByText('최근 프롬프트')).not.toBeInTheDocument();
+    });
+
+    it('히스토리를 최근 프롬프트로 보여주고 클릭하면 입력창에 채운다', async () => {
+      const user = userEvent.setup();
+      render(<PromptInput onGenerate={vi.fn()} isLoading={false} history={['히스토리 A', '히스토리 B']} />);
+
+      expect(screen.getByText('최근 프롬프트')).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: '히스토리 B' }));
+      expect(screen.getByRole('textbox')).toHaveValue('히스토리 B');
+    });
+
+    it('기록 삭제 버튼을 누르면 onClearHistory가 호출된다', async () => {
+      const onClearHistory = vi.fn();
+      const user = userEvent.setup();
+      render(
+        <PromptInput
+          onGenerate={vi.fn()}
+          isLoading={false}
+          history={['히스토리 A']}
+          onClearHistory={onClearHistory}
+        />,
+      );
+
+      await user.click(screen.getByRole('button', { name: '기록 삭제' }));
+      expect(onClearHistory).toHaveBeenCalledTimes(1);
+    });
+  });
 });

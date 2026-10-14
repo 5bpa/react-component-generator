@@ -18,7 +18,7 @@
 - 서버 포트 3002는 `server/index.ts:139`와 `vite.config.ts:11`에 각각 하드코딩되어 있다. 한쪽만 바꾸지 말고 항상 함께 수정한다.
 - API 키(`ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`)는 서버 프로세스에서만 읽는다(`server/index.ts:59-62`). 클라이언트 번들, 로그, 에러 메시지로 값을 내보내지 않는다.
 - `/api/config`는 키 보유 여부(boolean)만 반환한다(`server/index.ts:150-153`). 키 값을 응답에 추가하지 않는다.
-- 사용자가 UI에 입력한 키는 React state에만 둔다(`src/App.tsx:14`). localStorage 등에 영속화하지 않는다.
+- 사용자가 UI에 입력한 키는 사용자 결정에 따라 localStorage(`rcg.apiKeys`, `src/App.tsx`의 `useLocalStorage`)에 평문으로 영속화된다. 이 키를 `/api/generate` 요청 외의 곳(로그, 다른 API, 생성 코드 실행 컨텍스트)으로 보내지 않는다. 생성 코드는 같은 오리진에서 실행되므로(`src/components/LivePreview.tsx`) 키 접근 경로를 늘리는 변경은 금지한다.
 - `.env`는 커밋하지 않는다(`.gitignore`). 키 형식 문자열을 테스트·문서에 실제 값으로 넣지 않는다.
 
 ### Do's and Don'ts
