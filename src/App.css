@@ -717,3 +717,26 @@
     padding: 18px;
   }
 }
+
+.prompt-meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.prompt-error {
+  margin: 0;
+  color: #dc2626;
+}
+
+.prompt-counter {
+  margin-left: auto;
+  color: #6b7280;
+}
+
+.prompt-counter.over {
+  color: #dc2626;
+  font-weight: 600;
+}
